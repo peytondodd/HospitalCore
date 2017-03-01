@@ -22,9 +22,7 @@ public class MySQLFile {
 
 	try {
 	    cfg.save(getFile());
-
 	} catch (IOException e) {
-
 	    e.printStackTrace();
 	}
 
