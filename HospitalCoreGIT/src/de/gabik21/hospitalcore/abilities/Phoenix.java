@@ -100,7 +100,7 @@ public class Phoenix extends Ability {
 			    ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet4);
 			}
 
-			p.setVelocity(new Vector(0, 0.1, 0));
+			p.setVelocity(new Vector(0, 0.14, 0));
 
 		    } else {
 
