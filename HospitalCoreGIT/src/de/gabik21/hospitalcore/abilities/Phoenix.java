@@ -3,14 +3,21 @@ package de.gabik21.hospitalcore.abilities;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import de.gabik21.hospitalcore.types.Ability;
 import de.gabik21.hospitalcore.util.Inventories;
+import me.Muell.server.Main;
+import net.minecraft.server.v1_7_R4.PacketPlayOutWorldParticles;
 
 public class Phoenix extends Ability {
 
@@ -36,6 +43,84 @@ public class Phoenix extends Ability {
 
 		}
 	    }
+
+	    new BukkitRunnable() {
+
+		double height = 0;
+		double radius = 10;
+
+		double px = p.getLocation().getX();
+		double py = p.getLocation().getY();
+		double pz = p.getLocation().getZ();
+
+		@SuppressWarnings("deprecation")
+		@Override
+		public void run() {
+
+		    if (!pd.isIngame()) {
+
+			cancel();
+			return;
+		    }
+
+		    if (radius > 0) {
+
+			radius = radius - 0.1;
+
+			height = height + 0.1;
+
+			double y = height;
+			double x = radius * Math.sin(y);
+			double z = radius * Math.cos(y);
+
+			Location loc = new Location(p.getWorld(), px + x, py + y, pz + z);
+			Location loc2 = new Location(p.getWorld(), px - z, py + y, pz + x);
+			Location loc3 = new Location(p.getWorld(), px - x, py + y, pz - z);
+			Location loc4 = new Location(p.getWorld(), px + z, py + y, pz - x);
+
+			PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles("fireworksSpark",
+				(float) (loc.getX()), (float) (loc.getY()), (float) (loc.getZ()), 0, 0, 0, 0, 1);
+
+			PacketPlayOutWorldParticles packet2 = new PacketPlayOutWorldParticles("fireworksSpark",
+				(float) (loc2.getX()), (float) (loc2.getY()), (float) (loc2.getZ()), 0, 0, 0, 0, 1);
+
+			PacketPlayOutWorldParticles packet3 = new PacketPlayOutWorldParticles("fireworksSpark",
+				(float) (loc3.getX()), (float) (loc3.getY()), (float) (loc3.getZ()), 0, 0, 0, 0, 1);
+
+			PacketPlayOutWorldParticles packet4 = new PacketPlayOutWorldParticles("fireworksSpark",
+				(float) (loc4.getX()), (float) (loc4.getY()), (float) (loc4.getZ()), 0, 0, 0, 0, 1);
+
+			for (Player online : Bukkit.getOnlinePlayers()) {
+			    ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet);
+			    ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet2);
+			    ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet3);
+			    ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet4);
+			}
+
+			p.setVelocity(new Vector(0, 0.1, 0));
+
+		    } else {
+
+			cancel();
+
+			Location loc = p.getLocation();
+
+			for (int i = 0; i < 5; i++) {
+
+			    PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles("fireworksSpark",
+				    (float) (loc.getX()), (float) (loc.getY()), (float) (loc.getZ()), i, i, i, i, 20);
+
+			    for (Player online : Bukkit.getOnlinePlayers()) {
+				((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet);
+
+			    }
+
+			}
+
+		    }
+
+		}
+	    }.runTaskTimer(Main.getPlugin(), 0, 1);
 
 	}
 
