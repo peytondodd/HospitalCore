@@ -1,0 +1,81 @@
+authors: [Gabik21]
+name: HospitalCore
+main: de.gabik21.hospitalcore.HospitalCore
+version: 1.0
+depend: [WorldGuard, WorldEdit, LibsDisguises, PermissionsEx, GabikAPI]
+
+commands:
+   fix:
+      description: 'You can fix your position using this command'
+      usage: '§cWrong usage: use /<command>, [Player]'
+   admin:
+      description: 'You can enter the staff mode using this command'
+      usage: '§cWrong usage: use /<command>'
+   freeze:
+      description: 'You can freeze a player using this command' 
+      usage: '§cWrong usage: use /<command> [Player]'
+   setspawn:
+      description: 'You can set the spawn using this command'
+      usage: '§cWrong usage: use /<command>'
+   spawn:
+      description: 'You can teleport yourself back to spawn using this command'
+      usage: '§cWrong usage: use /<command>'
+   vanish:
+      description: 'You can toggle you visibility using this command'
+      usage: '§cWrong usage: /<command>'
+   check:
+      description: 'You can spectate a player in staff mode using this command'
+      usage: '§cWrong usage: use /<command> [Player]'
+   ping:
+      description: 'You can view your ping using this command'
+      usage: '§cWrong usage: use <command>'
+   ram:
+      description: 'You can free up ram using this command'
+      usage: '§cWrong usage: use /<command>'
+   report:
+      description: 'You can report players using this command'
+      usage: '§cWrong usage: use /<command> [Player] [reason]'
+   nick:
+      description: 'You can fake your name using this command'
+      usage: '§cWrong usage: use /<command> [name]'
+   alert:
+      description: 'You can edit broadcasts using this command'
+      usage: '§cWrong usage: use /<command> [add/remove/list] [int/String]'
+   team:
+      description: 'You can manage team related stuff using this command'
+      usage: '§cWrong usage: use /<command> [leave/accept/create/invite] (Player)'
+      aliases: [party]
+   t:
+      description: 'You can send a message to your team using this command'
+      usage: '§cWrong usage: use /<command> [msg]'
+   hologram:
+      description: 'You can manage holograms using this command'
+      usage: '§cWrong usage: use /<command> [remove/add/teleport/list] [name] (message)'
+   money:
+      description: ''
+      usage: '§cWrong usage: use /<command> or /<command> [Player] [Amount]'
+   chest:
+   ban:
+      usage: '§cWrong usage! use: /<command> [player] [reason]'
+   bancheck:
+   tempban:
+      usage: '§cWrong usage! use: /<command> [player] [time] [timeunit] [reason]'
+   tempmute:
+      usage: '§cWrong usage! use: /<command> [player] [time] [timeunit] [reason]'
+   mute:
+      usage: '§cWrong usage! use: /<command> [player] [reason]'
+   mutecheck:
+   unmute:
+   unban:
+   bcconfig:
+   msg:
+   r:
+   build:
+   pay:
+   fakekits:
+   kick:
+   globalmute:
+   hub:
+   ckit:
+   clearchat:
+      aliases: [cc]

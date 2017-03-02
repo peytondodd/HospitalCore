@@ -36,6 +36,7 @@ import de.gabik21.hospitalcore.commands.BanCommand;
 import de.gabik21.hospitalcore.commands.BuildCommand;
 import de.gabik21.hospitalcore.commands.CheckCommand;
 import de.gabik21.hospitalcore.commands.ChestCommand;
+import de.gabik21.hospitalcore.commands.ClearChatCommand;
 import de.gabik21.hospitalcore.commands.FakeKitsCommand;
 import de.gabik21.hospitalcore.commands.FixCommand;
 import de.gabik21.hospitalcore.commands.FreezeCommand;
@@ -51,6 +52,7 @@ import de.gabik21.hospitalcore.commands.PayCommand;
 import de.gabik21.hospitalcore.commands.PingCommand;
 import de.gabik21.hospitalcore.commands.ReplyCommand;
 import de.gabik21.hospitalcore.commands.ReportCommand;
+import de.gabik21.hospitalcore.commands.SeeKitCommand;
 import de.gabik21.hospitalcore.commands.SetSpawnCommand;
 import de.gabik21.hospitalcore.commands.SpawnCommand;
 import de.gabik21.hospitalcore.commands.TCommand;
@@ -218,6 +220,8 @@ public class HospitalCore extends JavaPlugin {
 	getCommand("build").setExecutor(new BuildCommand());
 	getCommand("pay").setExecutor(new PayCommand());
 	getCommand("fakekits").setExecutor(new FakeKitsCommand());
+	getCommand("ckit").setExecutor(new SeeKitCommand());
+	getCommand("clearchat").setExecutor(new ClearChatCommand());
 
     }
 

@@ -67,12 +67,16 @@ public class AbilityListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onItemSwitch(PlayerItemHeldEvent e) {
-
-	PlayerData pd = HospitalCore.getData(e.getPlayer());
+	
+	Player p = e.getPlayer();
+	PlayerData pd = HospitalCore.getData(p);
 
 	if (pd.isIngame() && pd.getKitConfig() != null)
 	    for (Kit kit : pd.getKitConfig().getAbilities())
 		kit.getAbility().onItemSwitch(e);
+	if (p.getItemInHand().hasItemMeta() && p.getItemInHand().getItemMeta().hasDisplayName()) {
+	    //TODO Finish better cooldowns
+	}
 
     }
 

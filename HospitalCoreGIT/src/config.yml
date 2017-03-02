@@ -1,0 +1,38 @@
+prefix: '§c[Hospital] '
+challenge:
+   x: 0
+   y: 100
+   z: 0
+   yaw: 0
+   pitch: 0
+spawn:
+   x: 0
+   y: 100
+   z: 0
+   yaw: 0
+   pitch: 0
+motd:
+   - test1
+   - test2
+   - test3
+   - test4
+messages:
+   win1v1: '§aYou won this 1v1 against <player>!'
+   lose1v1: '§aYou lost this 1v1 against <player>!'
+   frozenlogout: '§cPlayer <player> logged out while frozen!'
+   nopermission: '§cYou do not have permissions to use this command!'
+   commands:
+      fix: '§aYou have been fixed.'
+      fixother: '§aYou fixed Player <player>.'
+      adminon: '§7You are now in §4§lStaff §7mode.'
+      adminoff: '§7You are now in §aPlayer §7mode.'
+      freeze: '§a<player> has been frozen!'
+      unfreeze: '§a<player> has been unfrozen!'
+      spawn: '§aYou have been teleported to the spawn.'
+      von: '§aYou are now invisible!'
+      voff: '§aYou are bow visible!'
+      ping: '§aYour current ping is <ping>!'
+broadcasts:
+- &2Besuche uns doch mal auf dem &3Teamspeak3-Server: ts151.nitrado.net:12250
+
+   
