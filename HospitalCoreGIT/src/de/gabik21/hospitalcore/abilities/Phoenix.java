@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -107,6 +111,19 @@ public class Phoenix extends Ability {
 			cancel();
 
 			Location loc = p.getLocation();
+			Firework fw = loc.getWorld().spawn(loc.clone().add(0, -2, 0), Firework.class);
+			FireworkMeta meta = fw.getFireworkMeta();
+			meta.addEffect(FireworkEffect.builder().flicker(true).trail(true).withColor(Color.WHITE)
+				.withFade(Color.BLUE).build());
+			meta.setPower(1);
+			fw.setFireworkMeta(meta);
+
+			new BukkitRunnable() {
+			    @Override
+			    public void run() {
+				fw.detonate();
+			    }
+			}.runTaskLater(HospitalCore.inst(), 10);
 
 			for (int i = 0; i < 5; i++) {
 
@@ -115,7 +132,6 @@ public class Phoenix extends Ability {
 
 			    for (Player online : Bukkit.getOnlinePlayers()) {
 				((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet);
-
 			    }
 
 			}

@@ -115,7 +115,7 @@ public class PlayerData {
     public boolean isOnCooldown(Kit kit) {
 	return perKitCooldown.isOnCooldown(player, kit);
     }
-    
+
     public PerKitCooldown getPerKitCooldown() {
 	return perKitCooldown;
     }

@@ -3,6 +3,8 @@ package de.gabik21.hospitalcore.types;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.math3.distribution.EnumeratedDistribution;
 import org.apache.commons.math3.util.Pair;
@@ -18,6 +20,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import de.gabik21.hospitalcore.HospitalCore;
 
@@ -76,77 +79,95 @@ public class Chest implements Listener {
 
     private void start(final Player p) {
 
-	final PlayerData pd = HospitalCore.getData(p);
-	final List<Pair<Kit, Double>> notowned = new ArrayList<Pair<Kit, Double>>();
+	PlayerData pd = HospitalCore.getData(p);
+	List<Pair<Kit, Double>> notowned = new ArrayList<Pair<Kit, Double>>();
 	for (Kit k : Kit.values())
 	    notowned.add(new Pair<Kit, Double>(k, k.getLevel().getPercent()));
 	p.openInventory(inv.get(p.getName()));
 
-	new BukkitRunnable() {
-	    int i = 0;
+	AtomicInteger taskid = new AtomicInteger(-1);
+	BukkitTask task = new BukkitRunnable() {
 	    List<ItemStack> allitems = new ArrayList<ItemStack>();
 	    Kit chosen;
+	    double speed = 400;
+	    double recentspeed;
+	    boolean previousLoopDone = true;
 
 	    public void run() {
 
-		if (!p.isOnline()) {
-
-		    opening.remove(p.getName());
-		    inv.remove(p.getName());
-		    cancel();
-		    return;
-		}
-
-		EnumeratedDistribution<Kit> dist = new EnumeratedDistribution<Kit>(notowned);
-		Kit k = dist.sample();
-
-		ItemStack item = k.getInvItem().clone();
-		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(k.getLevel().getPrefix() + k.getName());
-		meta.setLore(k.getDescription());
-		item.setItemMeta(meta);
-
-		if (i == 27)
-		    chosen = k;
-		allitems.add(item);
-
-		Inventory inven = inv.get(p.getName());
-
-		p.playSound(p.getLocation(), Sound.CLICK, 5, 5);
-
-		for (int i = 0; i < allitems.size(); i++) {
-		    inven.setItem(17 - i, allitems.get(i));
-		}
-		if (allitems.size() >= 9)
-		    allitems.remove(0);
-
-		if (i > 30) {
-
-		    pd.addKit(chosen);
-		    p.playSound(p.getLocation(), Sound.LEVEL_UP, 5, 5);
-		    p.sendMessage("§aYou won " + chosen.getName());
-
-		    new BukkitRunnable() {
+		if (previousLoopDone) {
+		    previousLoopDone = false;
+		    Bukkit.getScheduler().scheduleSyncDelayedTask(HospitalCore.inst(), new Runnable() {
+			double decelleration = ThreadLocalRandom.current().nextDouble(2, 10);
 
 			public void run() {
 
-			    opening.remove(p.getName());
-			    inv.remove(p.getName());
+			    if (!p.isOnline()) {
+				opening.remove(p.getName());
+				inv.remove(p.getName());
+				Bukkit.getScheduler().cancelTask(taskid.get());
+				return;
+			    }
 
-			    if (p.isOnline())
-				p.closeInventory();
+			    EnumeratedDistribution<Kit> dist = new EnumeratedDistribution<Kit>(notowned);
+			    Kit k = dist.sample();
 
+			    ItemStack item = k.getInvItem().clone();
+			    ItemMeta meta = item.getItemMeta();
+			    meta.setDisplayName(k.getLevel().getPrefix() + k.getName());
+			    meta.setLore(k.getDescription());
+			    item.setItemMeta(meta);
+
+			    allitems.add(item);
+
+			    Inventory inven = inv.get(p.getName());
+
+			    p.playSound(p.getLocation(), Sound.CLICK, 5, 5);
+
+			    for (int i = 0; i < allitems.size(); i++) {
+				inven.setItem(17 - i, allitems.get(i));
+			    }
+			    if (allitems.size() >= 9)
+				allitems.remove(0);
+
+			    previousLoopDone = true;
+			    if (speed > 20) {
+				recentspeed = speed;
+				speed = recentspeed - decelleration;
+			    } else {
+				Bukkit.getScheduler().cancelTask(taskid.get());
+				ItemStack stack = inv.get(p.getName()).getItem(13);
+				for (Kit kit : Kit.values()) {
+				    if (stack.getItemMeta().getDisplayName().contains(kit.getName())) {
+					chosen = kit;
+					break;
+				    }
+				}
+
+				pd.addKit(chosen);
+
+				new BukkitRunnable() {
+				    public void run() {
+
+					opening.remove(p.getName());
+					inv.remove(p.getName());
+
+					if (p.isOnline()) {
+					    p.closeInventory();
+					    p.playSound(p.getLocation(), Sound.LEVEL_UP, 5, 5);
+					    p.sendMessage("§aYou won " + chosen.getName());
+					}
+
+				    }
+				}.runTaskLater(HospitalCore.inst(), 2 * 20);
+			    }
 			}
-		    }.runTaskLater(HospitalCore.inst(), 3 * 20);
-
-		    cancel();
-		    return;
+		    }, (int) Math.floor(400 / speed));
 		}
 
-		i++;
-
 	    }
-	}.runTaskTimer(HospitalCore.inst(), 20, 5);
+	}.runTaskTimer(HospitalCore.inst(), 20, 1);
+	taskid.set(task.getTaskId());
 
     }
 }
