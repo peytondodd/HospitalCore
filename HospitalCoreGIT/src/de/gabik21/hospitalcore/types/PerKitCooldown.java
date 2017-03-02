@@ -16,8 +16,7 @@ public class PerKitCooldown {
 
     public boolean isOnCooldown(Player p, Kit kit) {
 
-	if (kitCooldowns.containsKey(kit)
-		&& (System.currentTimeMillis() - kitCooldowns.get(kit)) < kit.getCooldown(p)) {
+	if (kitCooldowns.containsKey(kit) && (System.currentTimeMillis() - kitCooldowns.get(kit)) < kit.getCooldown()) {
 	    sendKitCooldown(p, kit);
 	    return true;
 	}
@@ -41,7 +40,7 @@ public class PerKitCooldown {
     }
 
     private void sendKitCooldown(Player p, Kit kit) {
-	long l = kit.getCooldown(p) - (System.currentTimeMillis() - kitCooldowns.get(kit));
+	long l = kit.getCooldown() - (System.currentTimeMillis() - kitCooldowns.get(kit));
 	double display = ((double) l) / 1000;
 	p.sendMessage("§cYour ability " + kit.getName() + " is still on cooldown : " + COOLDOWN_FORMAT.format(display));
     }
@@ -50,6 +49,14 @@ public class PerKitCooldown {
 	long l = GLOBAL_USAGE_COOLDOWN - (System.currentTimeMillis() - globalcooldown);
 	double display = ((double) l) / 1000;
 	p.sendMessage("§cYou're still on global cooldown: " + COOLDOWN_FORMAT.format(display));
+    }
+
+    public String getSeconds(Kit kit) {
+	if (kitCooldowns.containsKey(kit) && (System.currentTimeMillis() - kitCooldowns.get(kit)) < kit.getCooldown()) {
+	    long l = kit.getCooldown() - (System.currentTimeMillis() - kitCooldowns.get(kit));
+	    return " §8(§c" + COOLDOWN_FORMAT.format(((double) l) / 1000) + "§8)";
+	}
+	return "";
     }
 
 }

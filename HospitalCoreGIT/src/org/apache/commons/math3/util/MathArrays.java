@@ -1719,9 +1719,9 @@ public class MathArrays {
      *            {@code start} and either the end (if {@link Position#TAIL}) or
      *            the beginning (if {@link Position#HEAD}) of the array.
      */
-//    public static void shuffle(int[] list, int start, Position pos) {
-//	shuffle(list, start, pos, new Well19937c());
-//    }
+    // public static void shuffle(int[] list, int start, Position pos) {
+    // shuffle(list, start, pos, new Well19937c());
+    // }
 
     /**
      * Shuffle the entries of the given array, using the <a href=
@@ -1741,42 +1741,43 @@ public class MathArrays {
      * @param rng
      *            Random number generator.
      */
-//    public static void shuffle(int[] list, int start, Position pos, RandomGenerator rng) {
-//	switch (pos) {
-//	case TAIL: {
-//	    for (int i = list.length - 1; i >= start; i--) {
-//		final int target;
-//		if (i == start) {
-//		    target = start;
-//		} else {
-//		    // NumberIsTooLargeException cannot occur.
-//		    target = new UniformIntegerDistribution(rng, start, i).sample();
-//		}
-//		final int temp = list[target];
-//		list[target] = list[i];
-//		list[i] = temp;
-//	    }
-//	}
-//	    break;
-//	case HEAD: {
-//	    for (int i = 0; i <= start; i++) {
-//		final int target;
-//		if (i == start) {
-//		    target = start;
-//		} else {
-//		    // NumberIsTooLargeException cannot occur.
-//		    target = new UniformIntegerDistribution(rng, i, start).sample();
-//		}
-//		final int temp = list[target];
-//		list[target] = list[i];
-//		list[i] = temp;
-//	    }
-//	}
-//	    break;
-//	default:
-//	    throw new MathInternalError(); // Should never happen.
-//	}
-//    }
+    // public static void shuffle(int[] list, int start, Position pos,
+    // RandomGenerator rng) {
+    // switch (pos) {
+    // case TAIL: {
+    // for (int i = list.length - 1; i >= start; i--) {
+    // final int target;
+    // if (i == start) {
+    // target = start;
+    // } else {
+    // // NumberIsTooLargeException cannot occur.
+    // target = new UniformIntegerDistribution(rng, start, i).sample();
+    // }
+    // final int temp = list[target];
+    // list[target] = list[i];
+    // list[i] = temp;
+    // }
+    // }
+    // break;
+    // case HEAD: {
+    // for (int i = 0; i <= start; i++) {
+    // final int target;
+    // if (i == start) {
+    // target = start;
+    // } else {
+    // // NumberIsTooLargeException cannot occur.
+    // target = new UniformIntegerDistribution(rng, i, start).sample();
+    // }
+    // final int temp = list[target];
+    // list[target] = list[i];
+    // list[i] = temp;
+    // }
+    // }
+    // break;
+    // default:
+    // throw new MathInternalError(); // Should never happen.
+    // }
+    // }
 
     /**
      * Shuffle the entries of the given array.
@@ -1788,9 +1789,9 @@ public class MathArrays {
      * @param rng
      *            Random number generator.
      */
-//    public static void shuffle(int[] list, RandomGenerator rng) {
-//	shuffle(list, 0, Position.TAIL, rng);
-//    }
+    // public static void shuffle(int[] list, RandomGenerator rng) {
+    // shuffle(list, 0, Position.TAIL, rng);
+    // }
 
     /**
      * Shuffle the entries of the given array.
@@ -1800,9 +1801,9 @@ public class MathArrays {
      * @param list
      *            Array whose entries will be shuffled (in-place).
      */
-//    public static void shuffle(int[] list) {
-//	shuffle(list, new Well19937c());
-//    }
+    // public static void shuffle(int[] list) {
+    // shuffle(list, new Well19937c());
+    // }
 
     /**
      * Returns an array representing the natural number {@code n}.

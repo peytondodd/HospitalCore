@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -67,15 +68,26 @@ public class AbilityListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onItemSwitch(PlayerItemHeldEvent e) {
-	
+
 	Player p = e.getPlayer();
 	PlayerData pd = HospitalCore.getData(p);
 
 	if (pd.isIngame() && pd.getKitConfig() != null)
 	    for (Kit kit : pd.getKitConfig().getAbilities())
 		kit.getAbility().onItemSwitch(e);
-	if (p.getItemInHand().hasItemMeta() && p.getItemInHand().getItemMeta().hasDisplayName()) {
-	    //TODO Finish better cooldowns
+	ItemStack itemInHand = p.getInventory().getContents()[e.getNewSlot()];
+	if (pd.getKitConfig() != null && itemInHand != null && itemInHand.hasItemMeta()
+		&& itemInHand.getItemMeta().hasDisplayName()) {
+	    for (Kit kit : pd.getKitConfig().getAbilities()) {
+		if (pd.getKitConfig().getKitItem(kit) != null
+			&& pd.getKitConfig().getKitItem(kit) == itemInHand.getType()) {
+		    ItemMeta meta = itemInHand.getItemMeta();
+		    meta.setDisplayName(
+			    kit.getLevel().getPrefix() + kit.getName() + pd.getPerKitCooldown().getSeconds(kit));
+		    itemInHand.setItemMeta(meta);
+		    break;
+		}
+	    }
 	}
 
     }

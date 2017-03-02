@@ -100,7 +100,9 @@ public class KitConfiguration implements Serializable {
     }
 
     public Material getKitItem(Kit kit) {
-	return items.get(kit).get().getType();
+	if (items.containsKey(kit))
+	    return items.get(kit).get().getType();
+	return null;
     }
 
     public void kitItem(Kit kit, ItemStack item) {

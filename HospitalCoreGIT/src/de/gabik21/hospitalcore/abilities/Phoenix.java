@@ -14,7 +14,9 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
+import de.gabik21.hospitalcore.HospitalCore;
 import de.gabik21.hospitalcore.types.Ability;
+import de.gabik21.hospitalcore.types.PlayerData;
 import de.gabik21.hospitalcore.util.Inventories;
 import net.minecraft.server.v1_7_R4.PacketPlayOutWorldParticles;
 
@@ -27,6 +29,7 @@ public class Phoenix extends Ability {
 
 	Damageable d = (Damageable) e.getEntity();
 	Player p = (Player) e.getEntity();
+	PlayerData pd = HospitalCore.getData(p);
 
 	if (!e.isCancelled() && d.getHealth() - e.getDamage() <= 0
 		&& !phoenixed.remove(((Player) e.getEntity()).getName())) {
@@ -120,7 +123,7 @@ public class Phoenix extends Ability {
 		    }
 
 		}
-	    }.runTaskTimer(Main.getPlugin(), 0, 1);
+	    }.runTaskTimer(HospitalCore.inst(), 0, 1);
 
 	}
 
