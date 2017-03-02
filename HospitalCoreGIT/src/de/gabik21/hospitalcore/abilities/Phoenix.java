@@ -16,7 +16,6 @@ import org.bukkit.util.Vector;
 
 import de.gabik21.hospitalcore.types.Ability;
 import de.gabik21.hospitalcore.util.Inventories;
-import me.Muell.server.Main;
 import net.minecraft.server.v1_7_R4.PacketPlayOutWorldParticles;
 
 public class Phoenix extends Ability {
@@ -27,6 +26,7 @@ public class Phoenix extends Ability {
     public void onDamage(EntityDamageEvent e) {
 
 	Damageable d = (Damageable) e.getEntity();
+	Player p = (Player) e.getEntity();
 
 	if (!e.isCancelled() && d.getHealth() - e.getDamage() <= 0
 		&& !phoenixed.remove(((Player) e.getEntity()).getName())) {
