@@ -45,6 +45,5 @@ public class Phoenix extends Ability {
     public void onKill(PlayerDeathEvent e) {
 	phoenixed.remove(e.getEntity().getName());
     }
-    
 
 }

@@ -89,7 +89,6 @@ public class Hologram {
 	this.location = loc;
     }
 
-
     public List<String> getLines() {
 	return lines;
     }

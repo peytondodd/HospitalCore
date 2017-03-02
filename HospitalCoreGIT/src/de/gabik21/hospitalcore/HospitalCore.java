@@ -3,8 +3,10 @@ package de.gabik21.hospitalcore;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -417,10 +419,19 @@ public class HospitalCore extends JavaPlugin {
 
     }
 
-    @SuppressWarnings("deprecation")
-    public void resetPosition(final Player p) {
+    public void resetPosition(Player p, Player target) {
 
-	final List<String> undis = new ArrayList<String>();
+	if (target.canSee(p)) {
+	    target.hidePlayer(p);
+	    target.showPlayer(p);
+	}
+
+    }
+
+    @SuppressWarnings("deprecation")
+    public void resetPosition(Player p) {
+
+	Set<String> undis = new HashSet<String>();
 
 	for (Player pl : Bukkit.getOnlinePlayers()) {
 

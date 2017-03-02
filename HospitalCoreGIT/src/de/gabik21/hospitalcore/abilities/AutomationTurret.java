@@ -17,22 +17,23 @@ import de.gabik21.hospitalcore.util.Hologram;
 public class AutomationTurret extends Ability implements Listener {
 
     private static final long AUTOMATION_TURRET = 90_000;
-//    private static final Set<Turret> TURRETS = new HashSet<>();
+    // private static final Set<Turret> TURRETS = new HashSet<>();
 
     @Override
     public void activate(Player p) {
 
-//	PlayerData pd = HospitalCore.getData(p);
+	// PlayerData pd = HospitalCore.getData(p);
 
-//	if (p.getItemInHand().getType() != pd.getKitConfig().getKitItem(Kit.AUTOMATIONTURRET)
-//		|| pd.isOnCooldown(Kit.AUTOMATIONTURRET))
-//	    return;
-//
-//	for (Turret turret : TURRETS)
-//	    if (turret.getOwner().equals(p.getName()))
-//		return;
-//
-//	pd.useKit(Kit.AUTOMATIONTURRET);
+	// if (p.getItemInHand().getType() !=
+	// pd.getKitConfig().getKitItem(Kit.AUTOMATIONTURRET)
+	// || pd.isOnCooldown(Kit.AUTOMATIONTURRET))
+	// return;
+	//
+	// for (Turret turret : TURRETS)
+	// if (turret.getOwner().equals(p.getName()))
+	// return;
+	//
+	// pd.useKit(Kit.AUTOMATIONTURRET);
 
     }
 

@@ -66,7 +66,7 @@ public abstract class Ability {
 
     public void onDrop(PlayerDropItemEvent e) {
     }
-    
+
     public void onDeath(PlayerDeathEvent e) {
     }
 

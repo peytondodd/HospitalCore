@@ -1,9 +1,9 @@
 package de.gabik21.hospitalcore.commands;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import de.gabik21.hospitalcore.HospitalCore;
@@ -34,26 +34,12 @@ public class FixCommand implements CommandExecutor {
 	    if (args.length == 0) {
 
 		main.resetPosition(p);
-
-		p.sendMessage(main.getConfig().getString("messages.commands.fix"));
-
-		return true;
-
-	    }
-
-	    if (args.length == 1) {
-
-		if (Bukkit.getPlayer(args[0]) == null) {
-
-		    p.sendMessage(main.getConfig().getString("prefix") + " §cThe Player doesn't exist!");
-		    return true;
-
+		for (Entity ent : p.getNearbyEntities(50, 50, 50)) {
+		    if (ent instanceof Player) {
+			main.resetPosition((Player) ent, p);
+		    }
 		}
-
-		main.resetPosition(Bukkit.getPlayer(args[0]));
-
-		p.sendMessage(main.getConfig().getString("messages.commands.fixother").replace("<player>",
-			Bukkit.getPlayer(args[0]).getName()));
+		p.sendMessage(main.getConfig().getString("messages.commands.fix"));
 
 		return true;
 
