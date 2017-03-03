@@ -1,7 +1,7 @@
 package de.gabik21.hospitalcore.abilities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -26,7 +26,7 @@ import net.minecraft.server.v1_7_R4.PacketPlayOutWorldParticles;
 
 public class Phoenix extends Ability {
 
-    private List<String> phoenixed = new ArrayList<String>();
+    private Set<String> phoenixed = new HashSet<String>();
 
     @Override
     public void onDamage(EntityDamageEvent e) {
