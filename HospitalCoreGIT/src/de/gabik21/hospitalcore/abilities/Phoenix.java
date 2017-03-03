@@ -111,19 +111,14 @@ public class Phoenix extends Ability {
 			cancel();
 
 			Location loc = p.getLocation();
-			Firework fw = loc.getWorld().spawn(loc.clone().add(0, -2, 0), Firework.class);
+			Firework fw = loc.getWorld().spawn(loc, Firework.class);
 			FireworkMeta meta = fw.getFireworkMeta();
 			meta.addEffect(FireworkEffect.builder().flicker(true).trail(true).withColor(Color.WHITE)
 				.withFade(Color.BLUE).build());
 			meta.setPower(1);
 			fw.setFireworkMeta(meta);
 
-			new BukkitRunnable() {
-			    @Override
-			    public void run() {
-				fw.detonate();
-			    }
-			}.runTaskLater(HospitalCore.inst(), 10);
+			fw.detonate();
 
 			for (int i = 0; i < 5; i++) {
 
