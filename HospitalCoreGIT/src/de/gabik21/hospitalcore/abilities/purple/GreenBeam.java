@@ -28,7 +28,7 @@ public class GreenBeam extends Ability {
 	pd.useKit(Kit.GREENBEAM);
 
 	Beam greenbeam = new Beam(p, Material.EMERALD_BLOCK) {
-
+	    
 	    @Override
 	    public void onHit(Player hit, Item item) {
 
@@ -37,7 +37,6 @@ public class GreenBeam extends Ability {
 		hit.setVelocity(item.getVelocity().setY(0.36).multiply(0.5));
 
 	    }
-
 	};
 
 	greenbeam.eject();

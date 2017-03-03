@@ -46,7 +46,7 @@ public class Stomper extends Ability {
 	    w.playEffect(t.getLocation(), Effect.MOBSPAWNER_FLAMES, 5);
 
 	    if (td.getKitConfig().contains(Kit.ANTISTOMPER)) {
-		e.setCancelled(false);
+		p.damage(e.getDamage(), t);
 		continue;
 	    }
 

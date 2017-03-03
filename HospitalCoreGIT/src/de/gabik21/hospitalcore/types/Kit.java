@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionType;
 
 import de.gabik21.api.GabikAPI;
 import de.gabik21.hospitalcore.abilities.Anchor;
+import de.gabik21.hospitalcore.abilities.AutomationTurret;
 import de.gabik21.hospitalcore.abilities.Grappler;
 import de.gabik21.hospitalcore.abilities.Hedgehog;
 import de.gabik21.hospitalcore.abilities.Kangaroo;
@@ -89,16 +90,15 @@ public enum Kit {
 	    8D,
 	    KitLevel.PURPLE,
 	    Arrays.asList("Teleport yourself 7 blocks", "above your enemy to", "get a surprise attack")),
-    // AUTOMATIONTURRET(
-    // "Automation-Turret",
-    // true,
-    // new ItemStack[] {},
-    // new ItemStack(Material.FENCE),
-    // new AutomationTurret(),
-    // 15D,
-    // KitLevel.GOLD,
-    // Arrays.asList("Click your item to spawn", "a turret that will fire",
-    // "under your control")),
+    AUTOMATIONTURRET(
+	    "Automation-Turret",
+	    true,
+	    new ItemStack[] {},
+	    new ItemStack(Material.FENCE),
+	    new AutomationTurret(),
+	    15D,
+	    KitLevel.GOLD,
+	    Arrays.asList("Click your item to spawn", "a turret that will fire", "under your control")),
     BESERKER(
 	    "Beserker",
 	    false,
