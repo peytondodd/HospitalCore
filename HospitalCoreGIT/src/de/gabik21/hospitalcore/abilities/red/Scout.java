@@ -1,4 +1,4 @@
-package de.gabik21.hospitalcore.abilities;
+package de.gabik21.hospitalcore.abilities.red;
 
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionType;

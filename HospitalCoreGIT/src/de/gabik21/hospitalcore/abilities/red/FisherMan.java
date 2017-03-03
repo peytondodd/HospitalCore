@@ -1,4 +1,4 @@
-package de.gabik21.hospitalcore.abilities;
+package de.gabik21.hospitalcore.abilities.red;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerFishEvent;

@@ -1,4 +1,4 @@
-package de.gabik21.hospitalcore.abilities;
+package de.gabik21.hospitalcore.abilities.blue;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

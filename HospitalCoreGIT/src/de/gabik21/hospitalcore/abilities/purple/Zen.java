@@ -1,4 +1,4 @@
-package de.gabik21.hospitalcore.abilities;
+package de.gabik21.hospitalcore.abilities.purple;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;

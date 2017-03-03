@@ -65,7 +65,6 @@ public class Phoenix extends Ability {
 		public void run() {
 
 		    if (!pd.isIngame()) {
-
 			cancel();
 			return;
 		    }
@@ -73,7 +72,6 @@ public class Phoenix extends Ability {
 		    if (radius > 0) {
 
 			radius = radius - 0.1;
-
 			height = height + 0.1;
 
 			double y = height;
@@ -87,16 +85,13 @@ public class Phoenix extends Ability {
 
 			PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles("fireworksSpark",
 				(float) (loc.getX()), (float) (loc.getY()), (float) (loc.getZ()), 0, 0, 0, 0, 1);
-
 			PacketPlayOutWorldParticles packet2 = new PacketPlayOutWorldParticles("fireworksSpark",
 				(float) (loc2.getX()), (float) (loc2.getY()), (float) (loc2.getZ()), 0, 0, 0, 0, 1);
-
 			PacketPlayOutWorldParticles packet3 = new PacketPlayOutWorldParticles("fireworksSpark",
 				(float) (loc3.getX()), (float) (loc3.getY()), (float) (loc3.getZ()), 0, 0, 0, 0, 1);
-
 			PacketPlayOutWorldParticles packet4 = new PacketPlayOutWorldParticles("fireworksSpark",
 				(float) (loc4.getX()), (float) (loc4.getY()), (float) (loc4.getZ()), 0, 0, 0, 0, 1);
-
+			
 			for (Player online : Bukkit.getOnlinePlayers()) {
 			    ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet);
 			    ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet2);

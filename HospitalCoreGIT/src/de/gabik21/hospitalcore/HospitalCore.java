@@ -27,8 +27,8 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import de.gabik21.hospitalcore.abilities.AutomationTurret;
-import de.gabik21.hospitalcore.abilities.Gladiator;
-import de.gabik21.hospitalcore.abilities.MarioKart;
+import de.gabik21.hospitalcore.abilities.purple.Gladiator;
+import de.gabik21.hospitalcore.abilities.purple.MarioKart;
 import de.gabik21.hospitalcore.abilities.red.Napalm;
 import de.gabik21.hospitalcore.commands.AdminCommand;
 import de.gabik21.hospitalcore.commands.AlertCommand;

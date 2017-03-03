@@ -1,4 +1,4 @@
-package de.gabik21.hospitalcore.abilities.red;
+package de.gabik21.hospitalcore.abilities;
 
 import org.bukkit.Sound;
 import org.bukkit.entity.LivingEntity;
