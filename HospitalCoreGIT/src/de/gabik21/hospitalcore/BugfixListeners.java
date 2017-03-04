@@ -89,6 +89,8 @@ public class BugfixListeners implements Listener {
 	    e.setCancelled(true);
 	if (e.getMessage().equalsIgnoreCase("me"))
 	    e.setCancelled(true);
+	if (e.getMessage().equalsIgnoreCase("reload") || (e.getMessage().equalsIgnoreCase("rl")))
+	    e.setCancelled(true);
 
 	for (PlayerData pdall : PlayerData.map.values()) {
 	    if (pdall.getNick() != pdall.getPlayer().getName() && e.getMessage().contains(pdall.getNick())) {
