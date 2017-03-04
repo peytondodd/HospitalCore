@@ -468,7 +468,6 @@ public class Listeners implements Listener {
 		    if (!pdall.getNick().equals(pl.getName())) {
 			if (!p.hasPermission("Supporter") && !p.hasPermission("Moderator")
 				&& !p.hasPermission("YouTuber") && !p.hasPermission("Owner")) {
-			    System.out.println("Test3");
 			    final PlayerDisguise dis = new PlayerDisguise(pdall.getNick());
 			    new BukkitRunnable() {
 				public void run() {
@@ -501,9 +500,13 @@ public class Listeners implements Listener {
     @EventHandler
     public void onItemDespawn(ItemDespawnEvent e) {
 
+	if (e.getEntity().hasMetadata("nodespawn")) {
+	    e.setCancelled(true);
+	    return;
+	}
+
 	if (e.getEntity().getWorld().equals(Bukkit.getWorlds().get(0))
 		|| e.getEntity().getWorld().getName().equals("replay")) {
-
 	    Entity et = e.getEntity();
 	    et.getWorld().playEffect(et.getLocation(), Effect.SMOKE, 4);
 	    et.getWorld().playSound(et.getLocation(), Sound.CHICKEN_EGG_POP, 1, 1);

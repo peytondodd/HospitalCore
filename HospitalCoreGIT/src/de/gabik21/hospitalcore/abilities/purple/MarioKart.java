@@ -1,14 +1,13 @@
 package de.gabik21.hospitalcore.abilities.purple;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,11 +25,11 @@ import de.gabik21.hospitalcore.types.PlayerData;
 
 public class MarioKart extends Ability implements Listener {
 
-    final static long MARIOKART_COOLDOWN = 34000;
-    final static List<String> incart = new ArrayList<String>();
+    final static long MARIOKART_COOLDOWN = 60_000;
+    final static Set<String> incart = new HashSet<String>();
 
     @Override
-    public void activate(final Player p) {
+    public void activate(Player p) {
 
 	PlayerData pd = HospitalCore.getData(p);
 
@@ -41,9 +40,9 @@ public class MarioKart extends Ability implements Listener {
 	pd.useKit(Kit.MARIOKART);
 
 	incart.add(p.getName());
-	final Minecart m = (Minecart) p.getWorld().spawnEntity(p.getEyeLocation(), EntityType.MINECART);
+	Minecart m = (Minecart) p.getWorld().spawn(p.getEyeLocation(), Minecart.class);
 	m.setPassenger(p);
-	m.setMaxSpeed(m.getMaxSpeed() + 0.6D);
+	m.setMaxSpeed(m.getMaxSpeed() + 0.5D);
 	new BukkitRunnable() {
 	    public void run() {
 		incart.remove(p.getName());
@@ -108,7 +107,6 @@ public class MarioKart extends Ability implements Listener {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent e) {
-
 	incart.remove(e.getEntity().getName());
     }
 

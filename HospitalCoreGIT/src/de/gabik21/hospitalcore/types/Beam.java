@@ -52,7 +52,6 @@ public class Beam {
 	    public void run() {
 
 		if (!owner.isOnline() || item.isDead() || item.isOnGround()) {
-
 		    item.remove();
 		    cancel();
 		    return;

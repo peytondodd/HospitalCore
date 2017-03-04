@@ -11,6 +11,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,8 +22,10 @@ import org.bukkit.event.vehicle.VehicleDamageEvent;
 import org.bukkit.event.vehicle.VehicleEnterEvent;
 import org.bukkit.event.vehicle.VehicleMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 
 import de.gabik21.hospitalcore.HospitalCore;
 import de.gabik21.hospitalcore.types.Ability;
@@ -54,7 +58,7 @@ public class AutomationTurret extends Ability implements Listener {
 	    return;
 
 	for (Turret turret : TURRETS)
-	    if (turret.getOwner().equals(p.getName()) && turret.getMinecart().getPassenger() == p) {
+	    if (turret.getOwner().equals(p.getName()) && turret.getItem().getPassenger() == p) {
 		turret.setBullets(turret.getBullets() - 1);
 		Arrow arrow = p.launchProjectile(Arrow.class);
 		MiscDisguise dis = new MiscDisguise(DisguiseType.DROPPED_ITEM);
@@ -68,10 +72,12 @@ public class AutomationTurret extends Ability implements Listener {
 	    return;
 
 	pd.useKit(Kit.AUTOMATIONTURRET);
-
-	Turret turret = new Turret(p.getName(), p.getWorld().spawn(p.getLocation().add(0, 1.7, 0), Minecart.class),
+	Location loc = p.getLocation();
+	Turret turret = new Turret(
+		p.getName(), p.getWorld().spawn(new Location(p.getWorld(), loc.getBlockX() + 0.5,
+			loc.getBlockY() + 1.55, loc.getBlockZ() + 0.5), Minecart.class),
 		p.getLocation().getBlock().getState());
-	p.getLocation().getBlock().setType(Material.FENCE);
+	p.getLocation().getBlock().setType(Material.COBBLE_WALL);
 	TURRETS.add(turret);
 	turret.init();
 
@@ -82,6 +88,7 @@ public class AutomationTurret extends Ability implements Listener {
 	String owner;
 	BlockState previousBlock;
 	Minecart minecart;
+	Item item;
 	Location initialMinecartLoc;
 	Hologram hologram;
 	int health = 20, bullets = 120, missiles = 15, task;
@@ -129,6 +136,10 @@ public class AutomationTurret extends Ability implements Listener {
 	    this.update = true;
 	}
 
+	public Item getItem() {
+	    return item;
+	}
+
 	public Location getInitialMinecartLoc() {
 	    return initialMinecartLoc;
 	}
@@ -138,6 +149,7 @@ public class AutomationTurret extends Ability implements Listener {
 	    previousBlock.update(true, false);
 	    hologram.destroy();
 	    minecart.remove();
+	    item.remove();
 	    TURRETS.remove(this);
 	}
 
@@ -149,10 +161,20 @@ public class AutomationTurret extends Ability implements Listener {
 	    h.addLine("§9Bullets: " + bullets);
 	    h.addLine("§3Missiles: " + missiles);
 	    hologram = h;
+	    item = Bukkit.getPlayer(owner).getWorld().dropItem(initialMinecartLoc.clone().add(0, 0.5, 0),
+		    new ItemStack(Material.STONE));
+	    item.setPickupDelay(Integer.MAX_VALUE);
+	    item.setMetadata("nodespawn", new FixedMetadataValue(HospitalCore.inst(), null));
 
 	    BukkitTask t = new BukkitRunnable() {
 		@Override
 		public void run() {
+
+		    if (Bukkit.getPlayer(owner) == null) {
+			remove();
+			return;
+		    }
+
 		    if (update) {
 			List<String> lines = Arrays.asList("§cHealth: " + health, "§9Bullets: " + bullets,
 				"§3Missiles: " + missiles);
@@ -162,11 +184,29 @@ public class AutomationTurret extends Ability implements Listener {
 		    if (health <= 0 || bullets <= 0)
 			remove();
 
+		    item.setVelocity(new Vector());
+
+		    Location loc = initialMinecartLoc;
+		    loc.setYaw(Bukkit.getPlayer(owner).getLocation().getYaw() + 90);
+		    loc.setPitch(Bukkit.getPlayer(owner).getLocation().getPitch() * -1);
+
+		    minecart.teleport(loc);
+		    item.setFallDistance(0);
+		    if (!item.isEmpty()) {
+			Entity passenger = item.getPassenger();
+			item.getPassenger().eject();
+			item.teleport(loc.clone().add(0, 0.5, 0));
+			item.setPassenger(passenger);
+		    } else {
+			item.teleport(loc.clone().add(0, 0.5, 0));
+		    }
+
 		}
 	    }.runTaskTimer(HospitalCore.inst(), 1, 1);
 	    task = t.getTaskId();
 
 	}
+
     }
 
     @EventHandler
@@ -187,10 +227,12 @@ public class AutomationTurret extends Ability implements Listener {
     public void onTurretEnter(VehicleEnterEvent e) {
 	for (Turret turret : TURRETS)
 	    if (turret.getMinecart().equals(e.getVehicle()))
-		if (e.getEntered() instanceof Player
-			&& !((Player) e.getEntered()).getName().equals(turret.getOwner())) {
+		if (e.getEntered() instanceof Player) {
 		    e.setCancelled(true);
-		    break;
+		    if (((Player) e.getEntered()).getName().equals(turret.getOwner())) {
+			turret.getItem().setPassenger(e.getEntered());
+			break;
+		    }
 		}
     }
 

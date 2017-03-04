@@ -57,4 +57,29 @@ public enum SpawnPoints {
 	return this.loc;
     }
 
+    private void setLocation(Location loc) {
+	this.loc = loc;
+    }
+
+    public static void refresh() {
+	for (SpawnPoints point : SpawnPoints.values()) {
+	    if (point == ONEVSONE) {
+		point.setLocation(
+			new Location(Bukkit.getWorlds().get(0), HospitalCore.inst().getConfig().getDouble("1v1.x"),
+				HospitalCore.inst().getConfig().getDouble("1v1.y") + 1,
+				HospitalCore.inst().getConfig().getDouble("1v1.z"),
+				(float) HospitalCore.inst().getConfig().getDouble("1v1.yaw"),
+				(float) HospitalCore.inst().getConfig().getDouble("1v1.pitch")));
+	    } else {
+		String name = point.name().toLowerCase();
+		point.setLocation(
+			new Location(Bukkit.getWorlds().get(0), HospitalCore.inst().getConfig().getDouble(name + ".x"),
+				HospitalCore.inst().getConfig().getDouble(name + ".y") + 1,
+				HospitalCore.inst().getConfig().getDouble(name + ".z"),
+				(float) HospitalCore.inst().getConfig().getDouble(name + ".yaw"),
+				(float) HospitalCore.inst().getConfig().getDouble(name + ".pitch")));
+	    }
+	}
+    }
+
 }
