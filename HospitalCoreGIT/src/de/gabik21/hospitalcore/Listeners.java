@@ -182,6 +182,7 @@ public class Listeners implements Listener {
 	}
 
 	pd.setLastMessage(e.getMessage());
+	e.setMessage(e.getMessage().replaceAll(pd.getNick(), s + pd.getNick()));
 
 	if (!pd.getNick().equals(p.getName())) {
 	    e.setFormat(s + pd.getNick() + "§7§l> §r" + e.getMessage());

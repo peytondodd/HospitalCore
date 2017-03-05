@@ -45,8 +45,10 @@ public class AbilityListener implements Listener {
 		ItemStack stack = litr.next();
 
 		for (ItemStack d : pd.getKitConfig().getItems())
-		    if (stack.getType().equals(d.getType()))
+		    if (stack.getType().equals(d.getType())) {
 			litr.remove();
+			break;
+		    }
 
 	    }
 

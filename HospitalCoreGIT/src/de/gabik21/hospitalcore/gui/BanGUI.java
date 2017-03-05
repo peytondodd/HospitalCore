@@ -33,7 +33,7 @@ public class BanGUI extends AbstractGUI {
 
     }
 
-    public BanGUI(Player player, final String target) {
+    public BanGUI(Player player, String target) {
 	super(27, "§c§lBanGUI", player);
 
 	AbstractAction cheating = new AbstractAction() {

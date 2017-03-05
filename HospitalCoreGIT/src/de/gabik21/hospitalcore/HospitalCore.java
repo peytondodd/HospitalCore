@@ -60,6 +60,7 @@ import de.gabik21.hospitalcore.commands.TeamCommand;
 import de.gabik21.hospitalcore.commands.VCommand;
 import de.gabik21.hospitalcore.types.Chest;
 import de.gabik21.hospitalcore.types.Kit;
+import de.gabik21.hospitalcore.types.LoadedData;
 import de.gabik21.hospitalcore.types.PlayerData;
 import de.gabik21.hospitalcore.types.Report;
 import de.gabik21.hospitalcore.util.Hologram;
@@ -124,7 +125,8 @@ public class HospitalCore extends JavaPlugin {
     @SuppressWarnings("deprecation")
     private void reloadCompatibilty() {
 	for (Player p : Bukkit.getOnlinePlayers()) {
-	    SavingUnit.loadData(p.getUniqueId(), true);
+	    LoadedData data = SavingUnit.loadData(p.getUniqueId(), true);
+	    PlayerData.preloaded.put(p.getUniqueId(), data);
 	    PlayerData pd = new PlayerData(p);
 	    pd.spawn();
 	}

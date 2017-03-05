@@ -3,6 +3,7 @@ package de.gabik21.hospitalcore.abilities;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -10,6 +11,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftItem;
+import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -36,6 +40,8 @@ import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.DroppedItemWatcher;
+import net.minecraft.server.v1_7_R4.PacketPlayOutAttachEntity;
+import net.minecraft.server.v1_7_R4.PacketPlayOutEntityDestroy;
 
 public class AutomationTurret extends Ability implements Listener {
 
@@ -44,9 +50,10 @@ public class AutomationTurret extends Ability implements Listener {
 
     @Override
     public void onDeath(PlayerDeathEvent e) {
-	for (Turret turret : TURRETS)
-	    if (turret.getOwner().equals(e.getEntity().getName()))
-		turret.remove();
+	Iterator<Turret> itr = TURRETS.iterator();
+	while (itr.hasNext())
+	    if (itr.next().getOwner().equals(e.getEntity().getName()))
+		itr.remove();
     }
 
     @Override
@@ -58,8 +65,9 @@ public class AutomationTurret extends Ability implements Listener {
 	    return;
 
 	for (Turret turret : TURRETS)
-	    if (turret.getOwner().equals(p.getName()) && turret.getItem().getPassenger() == p) {
-		turret.setBullets(turret.getBullets() - 1);
+	    if (turret.getOwner().equals(p.getName())) {
+		if (turret.getItem().getPassenger() == p)
+		    turret.setBullets(turret.getBullets() - 1);
 		Arrow arrow = p.launchProjectile(Arrow.class);
 		MiscDisguise dis = new MiscDisguise(DisguiseType.DROPPED_ITEM);
 		DroppedItemWatcher watcher = (DroppedItemWatcher) dis.getWatcher();
@@ -153,6 +161,7 @@ public class AutomationTurret extends Ability implements Listener {
 	    TURRETS.remove(this);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void init() {
 
 	    Hologram h = new Hologram(new ArrayList<>());
@@ -161,10 +170,15 @@ public class AutomationTurret extends Ability implements Listener {
 	    h.addLine("§9Bullets: " + bullets);
 	    h.addLine("§3Missiles: " + missiles);
 	    hologram = h;
-	    item = Bukkit.getPlayer(owner).getWorld().dropItem(initialMinecartLoc.clone().add(0, 0.5, 0),
-		    new ItemStack(Material.STONE));
+	    item = minecart.getWorld().dropItem(initialMinecartLoc.clone().add(0, 0.3, 0),
+		    new ItemStack(Material.STONE_BUTTON));
 	    item.setPickupDelay(Integer.MAX_VALUE);
 	    item.setMetadata("nodespawn", new FixedMetadataValue(HospitalCore.inst(), null));
+
+	    PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(item.getEntityId());
+	    for (Player player : Bukkit.getOnlinePlayers())
+		if (player != Bukkit.getPlayer(owner))
+		    ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 
 	    BukkitTask t = new BukkitRunnable() {
 		@Override
@@ -188,17 +202,17 @@ public class AutomationTurret extends Ability implements Listener {
 
 		    Location loc = initialMinecartLoc;
 		    loc.setYaw(Bukkit.getPlayer(owner).getLocation().getYaw() + 90);
-		    loc.setPitch(Bukkit.getPlayer(owner).getLocation().getPitch() * -1);
+		    loc.setPitch(-35);
 
 		    minecart.teleport(loc);
 		    item.setFallDistance(0);
 		    if (!item.isEmpty()) {
 			Entity passenger = item.getPassenger();
 			item.getPassenger().eject();
-			item.teleport(loc.clone().add(0, 0.5, 0));
+			item.teleport(loc.clone().add(0, 0.3, 0));
 			item.setPassenger(passenger);
 		    } else {
-			item.teleport(loc.clone().add(0, 0.5, 0));
+			item.teleport(loc.clone().add(0, 0.3, 0));
 		    }
 
 		}
@@ -231,7 +245,6 @@ public class AutomationTurret extends Ability implements Listener {
 		    e.setCancelled(true);
 		    if (((Player) e.getEntered()).getName().equals(turret.getOwner())) {
 			turret.getItem().setPassenger(e.getEntered());
-			break;
 		    }
 		}
     }

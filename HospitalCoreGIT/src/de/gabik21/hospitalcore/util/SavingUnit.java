@@ -105,6 +105,7 @@ public class SavingUnit {
 
 	String uuid = pd.getPlayer().getUniqueId().toString();
 	Stats stats = pd.getStats();
+	pd.setFakekits(false);
 
 	MySQL.executeUpdate(String.format(
 		"UPDATE data SET Money = %s, Kills = %s, Deaths = %s, Wins = %s, Chests = %s WHERE UUID = '%s'",

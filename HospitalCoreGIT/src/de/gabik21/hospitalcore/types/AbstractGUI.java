@@ -13,6 +13,7 @@ import de.gabik21.hospitalcore.HospitalCore;
 public abstract class AbstractGUI {
 
     protected Inventory inventory;
+    private boolean shouldclose = true;
     protected Map<Integer, AbstractAction> actions = new HashMap<Integer, AbstractAction>();
 
     public AbstractGUI(int slots, String title, Player player) {
@@ -23,9 +24,7 @@ public abstract class AbstractGUI {
     }
 
     public Inventory getInventory() {
-
 	return this.inventory;
-
     }
 
     public void setItem(ItemStack item, int slot, AbstractAction action) {
@@ -45,6 +44,18 @@ public abstract class AbstractGUI {
 
     public interface AbstractAction {
 	void click(Player player);
+    }
+
+    public void setUncloseable() {
+	this.shouldclose = false;
+    }
+
+    public void setCloseable() {
+	this.shouldclose = true;
+    }
+
+    public boolean close() {
+	return shouldclose;
     }
 
 }

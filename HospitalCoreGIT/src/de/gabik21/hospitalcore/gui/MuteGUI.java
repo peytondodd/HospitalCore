@@ -8,7 +8,7 @@ import de.gabik21.hospitalcore.types.AbstractGUI;
 
 public class MuteGUI extends AbstractGUI {
 
-    public MuteGUI(Player player, final String target) {
+    public MuteGUI(Player player, String target) {
 	super(27, "§c§lMuteGUI", player);
 
 	AbstractAction toxic = new AbstractAction() {

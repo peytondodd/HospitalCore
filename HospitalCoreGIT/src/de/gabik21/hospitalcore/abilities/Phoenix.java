@@ -112,8 +112,13 @@ public class Phoenix extends Ability {
 				.withFade(Color.BLUE).build());
 			meta.setPower(1);
 			fw.setFireworkMeta(meta);
-
-			fw.detonate();
+			
+			new BukkitRunnable() {
+			    @Override
+			    public void run() {
+				fw.detonate();
+			    }
+			}.runTaskLater(HospitalCore.inst(), 1);
 
 			for (int i = 0; i < 5; i++) {
 

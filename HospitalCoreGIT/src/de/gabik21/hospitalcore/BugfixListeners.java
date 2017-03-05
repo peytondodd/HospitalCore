@@ -18,6 +18,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.RemoteConsoleCommandSender;
 import org.bukkit.command.defaults.TimingsCommand;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,6 +29,7 @@ import org.bukkit.event.block.BlockFadeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -193,6 +195,12 @@ public class BugfixListeners implements Listener {
 	    }
 	}
 
+    }
+
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent e) {
+	if (e.getEntity() instanceof Arrow)
+	    e.getEntity().remove();
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

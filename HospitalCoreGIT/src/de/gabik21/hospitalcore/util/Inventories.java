@@ -11,17 +11,17 @@ public enum Inventories {
     RC32,
     RC64,
     SPAWN(
-	    new ItemStack[] { GabikAPI.createItem(Material.ANVIL, "§4Kitcreation"), null,
-		    GabikAPI.createItem(Material.ENCHANTMENT_TABLE, "§4Market"), null,
+	    new ItemStack[] { GabikAPI.createItem(Material.ANVIL, "§1Kitcreation"), null,
+		    GabikAPI.createItem(Material.ENCHANTMENT_TABLE, "§5Market"), null,
 		    GabikAPI.createItem(Material.COMPASS, "§4Gamemodes"), null,
-		    GabikAPI.createItem(Material.CHEST, "§4Chests"), null, }),
+		    GabikAPI.createItem(Material.CHEST, "§2Chests"), null, }),
     ADMIN(
 	    new ItemStack[] { GabikAPI.createItem(Material.BOOK, "§aReports"),
 		    GabikAPI.createItem(Material.CARPET, "§aInv-Viewer"), null, null,
 		    GabikAPI.createItem(Material.BLAZE_ROD, "§aFreezer"), null, null, null,
 		    GabikAPI.createItem(Material.ARROW, "§aVisibility") }),
     MARKET(
-	    new ItemStack[] { null, null, null, GabikAPI.createItem(Material.ENCHANTMENT_TABLE, "§4Market"), null,
+	    new ItemStack[] { GabikAPI.createItem(Material.BLAZE_ROD, "§6Trade wand"), null, null, GabikAPI.createItem(Material.ENCHANTMENT_TABLE, "§4Market"), null,
 		    GabikAPI.createItem(Material.BEACON, "§4Sell an ability"), null, null,
 		    GabikAPI.createItem(Material.SLIME_BALL, "§4Back to spawn") }),
     KITCREATOR(

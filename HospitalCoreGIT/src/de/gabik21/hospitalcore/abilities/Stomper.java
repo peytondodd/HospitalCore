@@ -47,6 +47,7 @@ public class Stomper extends Ability {
 
 	    if (td.getKitConfig().contains(Kit.ANTISTOMPER)) {
 		p.damage(e.getDamage(), t);
+		p.sendMessage("§cBad luck you stomped an Anti-Stomper");
 		continue;
 	    }
 
