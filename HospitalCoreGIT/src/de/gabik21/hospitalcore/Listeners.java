@@ -47,13 +47,10 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 import de.gabik21.hospitalcore.types.PlayerData;
-import de.gabik21.hospitalcore.types.Report;
 import de.gabik21.hospitalcore.util.BanManager;
 import de.gabik21.hospitalcore.util.Hologram;
 import de.gabik21.hospitalcore.util.MuteManager;
@@ -66,11 +63,10 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 public class Listeners implements Listener {
 
     private HospitalCore main;
-    private static Lock lock = new ReentrantLock();
+    public static Lock lock = new ReentrantLock();
     public static final AtomicBoolean GLOBAL_CHATMUTE = new AtomicBoolean(false);
 
     public Listeners(HospitalCore main) {
-
 	this.main = main;
     }
 
@@ -494,8 +490,6 @@ public class Listeners implements Listener {
 	    hologram.show(hologram.getLocation(), p);
 	}
 
-	makeScoreboard(p);
-
     }
 
     @EventHandler
@@ -614,7 +608,8 @@ public class Listeners implements Listener {
 		    team = scoreboard.registerNewTeam(player.getName());
 
 		team.setPrefix(nick);
-		team.addEntry(pd.getNick());
+		if (!team.getEntries().contains(pd.getNick()))
+		    team.addEntry(pd.getNick());
 		team.setSuffix("");
 		online.setScoreboard(scoreboard);
 
@@ -622,101 +617,6 @@ public class Listeners implements Listener {
 	} finally {
 	    lock.unlock();
 	}
-    }
-
-    @SuppressWarnings("deprecation")
-    private void makeScoreboard(final Player p) {
-
-	new BukkitRunnable() {
-	    public void run() {
-
-		if (!p.isOnline())
-		    return;
-
-		PlayerData pd = HospitalCore.getData(p);
-
-		Scoreboard sb = p.getScoreboard();
-		Objective obj = sb.registerNewObjective("sidebar", "bbb");
-
-		obj.setDisplayName("§4PvPHospital");
-		makeTeam(sb, "player", "Player", "", "");
-		obj.getScore("Player").setScore(7);
-
-		makeTeam(sb, "playername", "§r§c", "  ", pd.getNick());
-		obj.getScore("§r§c").setScore(6);
-
-		makeTeam(sb, "rank", "Rank", "", "");
-		obj.getScore("Rank").setScore(4);
-
-		Team playerrank = sb.registerNewTeam("playerrank");
-
-		if (PermissionsEx.getUser(p).getGroups().length > 0)
-		    playerrank.setSuffix(
-			    PermissionsEx.getUser(p).getPrefix() + PermissionsEx.getUser(p).getGroups()[0].getName());
-		else
-		    playerrank.setSuffix("default");
-		playerrank.setPrefix("  ");
-		playerrank.addEntry("§r");
-		obj.getScore("§r").setScore(3);
-
-		makeTeam(sb, "money", "Money", "", "");
-		obj.getScore("Money").setScore(1);
-
-		makeTeam(sb, "playermoney", "§c", "  ", String.valueOf(pd.getMoney()));
-		obj.getScore("§c").setScore(0);
-
-		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-
-		makeTeam(sb, "place", "", "", "");
-		makeTeam(sb, "place2", "§9", "", "");
-		obj.getScore("§9").setScore(2);
-		obj.getScore("").setScore(5);
-
-		// Admin mode scoreboard
-		if (!p.hasPermission("Owner") && !p.hasPermission("Moderator") && !p.hasPermission("Supporter"))
-		    return;
-
-		Objective admin = sb.registerNewObjective("admin", "dummy");
-		admin.setDisplayName("§4§lStaffmode");
-
-		Team visible = sb.registerNewTeam("visible");
-		visible.addEntry("Visible");
-		admin.getScore("Visible").setScore(7);
-
-		makeTeam(sb, "playervisible", "  ", "§c", String.valueOf(pd.isDisguised()));
-		admin.getScore("  ").setScore(6);
-
-		Team reports = sb.registerNewTeam("reports");
-		reports.addEntry("Reports");
-		admin.getScore("Reports").setScore(4);
-
-		makeTeam(sb, "playerreports", "§c ", " ", String.valueOf(Report.list.size()));
-		admin.getScore("§c ").setScore(3);
-
-		makeTeam(sb, "build", "Build", "", "");
-		admin.getScore("Build").setScore(1);
-
-		makeTeam(sb, "playerbuild", "§c  ", "", String.valueOf(pd.canBuild()));
-		admin.getScore("§c  ").setScore(0);
-
-		makeTeam(sb, "aplace", "", "", "");
-		makeTeam(sb, "aplace2", "§9", "", "");
-		admin.getScore("§9").setScore(2);
-		admin.getScore("").setScore(5);
-	    }
-	}.runTaskAsynchronously(main);
-
-    }
-
-    private Team makeTeam(Scoreboard sb, String name, String entry, String prefix, String suffix) {
-
-	Team team = sb.registerNewTeam(name);
-	team.addEntry(entry);
-	team.setPrefix(prefix);
-	team.setSuffix(suffix);
-
-	return team;
-
     }
 
     @SuppressWarnings("deprecation")

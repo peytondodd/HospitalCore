@@ -254,48 +254,57 @@ public class HospitalCore extends JavaPlugin {
 	new BukkitRunnable() {
 	    public void run() {
 		Player[] players = Bukkit.getOnlinePlayers().clone();
+		Listeners.lock.lock();
 
-		for (Player p : players) {
+		try {
+		    for (Player p : players) {
 
-		    if (!p.isOnline())
-			continue;
+			if (!p.isOnline())
+			    continue;
 
-		    Scoreboard sb = p.getScoreboard();
-		    Objective obj = sb.getObjective("sidebar");
-		    Objective admin = sb.getObjective("admin");
-		    Team name = sb.getTeam("playername");
-		    Team money = sb.getTeam("playermoney");
-		    Team playerrank = sb.getTeam("playerrank");
+			Scoreboard sb = p.getScoreboard();
+			Objective obj = sb.getObjective("sidebar");
 
-		    PlayerData pd = HospitalCore.getData(p);
-		    if (pd.isIngame())
-			obj.setDisplaySlot(null);
-		    else if (obj.getDisplaySlot() != DisplaySlot.SIDEBAR && !pd.isInAdminmode())
-			obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+			if (obj == null)
+			    makeScoreboard(p);
 
-		    if (pd.isInAdminmode() && admin.getDisplaySlot() != DisplaySlot.SIDEBAR)
-			admin.setDisplaySlot(DisplaySlot.SIDEBAR);
+			Objective admin = sb.getObjective("admin");
+			Team name = sb.getTeam("playername");
+			Team money = sb.getTeam("playermoney");
+			Team playerrank = sb.getTeam("playerrank");
 
-		    if (PermissionsEx.getUser(p).getGroups().length > 0)
-			playerrank.setSuffix(PermissionsEx.getUser(p).getPrefix()
-				+ PermissionsEx.getUser(p).getGroups()[0].getName());
-		    else
-			playerrank.setSuffix("default");
+			PlayerData pd = HospitalCore.getData(p);
+			if (pd.isIngame())
+			    obj.setDisplaySlot(null);
+			else if (obj.getDisplaySlot() != DisplaySlot.SIDEBAR && !pd.isInAdminmode())
+			    obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-		    name.setSuffix(pd.getNick());
-		    money.setSuffix(String.valueOf(pd.getMoney()));
+			if (pd.isInAdminmode() && admin.getDisplaySlot() != DisplaySlot.SIDEBAR)
+			    admin.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-		    if (admin == null)
-			continue;
+			if (PermissionsEx.getUser(p).getGroups().length > 0)
+			    playerrank.setSuffix(PermissionsEx.getUser(p).getPrefix()
+				    + PermissionsEx.getUser(p).getGroups()[0].getName());
+			else
+			    playerrank.setSuffix("default");
 
-		    Team playerreports = sb.getTeam("playerreports");
-		    Team playervisible = sb.getTeam("playervisible");
-		    Team playerbuild = sb.getTeam("playerbuild");
+			name.setSuffix(pd.getNick());
+			money.setSuffix(String.valueOf(pd.getMoney()));
 
-		    playerreports.setSuffix(String.valueOf(Report.list.size()));
-		    playervisible.setSuffix(String.valueOf(!pd.isDisguised()));
-		    playerbuild.setSuffix(String.valueOf(pd.canBuild()));
+			if (admin == null)
+			    continue;
 
+			Team playerreports = sb.getTeam("playerreports");
+			Team playervisible = sb.getTeam("playervisible");
+			Team playerbuild = sb.getTeam("playerbuild");
+
+			playerreports.setSuffix(String.valueOf(Report.list.size()));
+			playervisible.setSuffix(String.valueOf(!pd.isDisguised()));
+			playerbuild.setSuffix(String.valueOf(pd.canBuild()));
+
+		    }
+		} finally {
+		    Listeners.lock.unlock();
 		}
 	    }
 	}.runTaskTimerAsynchronously(instance, 10 * 20, 10);
@@ -341,6 +350,93 @@ public class HospitalCore extends JavaPlugin {
 		}
 	    }
 	}.runTaskTimer(instance, 0, 1);
+    }
+
+    @SuppressWarnings("deprecation")
+    private void makeScoreboard(final Player p) {
+
+	PlayerData pd = HospitalCore.getData(p);
+
+	Scoreboard sb = p.getScoreboard();
+	Objective obj = sb.registerNewObjective("sidebar", "bbb");
+
+	obj.setDisplayName("§4PvPHospital");
+	makeTeam(sb, "player", "Player", "", "");
+	obj.getScore("Player").setScore(7);
+
+	makeTeam(sb, "playername", "§r§c", "  ", pd.getNick());
+	obj.getScore("§r§c").setScore(6);
+
+	makeTeam(sb, "rank", "Rank", "", "");
+	obj.getScore("Rank").setScore(4);
+
+	Team playerrank = sb.registerNewTeam("playerrank");
+
+	if (PermissionsEx.getUser(p).getGroups().length > 0)
+	    playerrank.setSuffix(
+		    PermissionsEx.getUser(p).getPrefix() + PermissionsEx.getUser(p).getGroups()[0].getName());
+	else
+	    playerrank.setSuffix("default");
+	playerrank.setPrefix("  ");
+	playerrank.addEntry("§r");
+	obj.getScore("§r").setScore(3);
+
+	makeTeam(sb, "money", "Money", "", "");
+	obj.getScore("Money").setScore(1);
+
+	makeTeam(sb, "playermoney", "§c", "  ", String.valueOf(pd.getMoney()));
+	obj.getScore("§c").setScore(0);
+
+	obj.setDisplaySlot(DisplaySlot.SIDEBAR);
+
+	makeTeam(sb, "place", "", "", "");
+	makeTeam(sb, "place2", "§9", "", "");
+	obj.getScore("§9").setScore(2);
+	obj.getScore("").setScore(5);
+
+	// Admin mode scoreboard
+	if (!p.hasPermission("Owner") && !p.hasPermission("Moderator") && !p.hasPermission("Supporter"))
+	    return;
+
+	Objective admin = sb.registerNewObjective("admin", "dummy");
+	admin.setDisplayName("§4§lStaffmode");
+
+	Team visible = sb.registerNewTeam("visible");
+	visible.addEntry("Visible");
+	admin.getScore("Visible").setScore(7);
+
+	makeTeam(sb, "playervisible", "  ", "§c", String.valueOf(pd.isDisguised()));
+	admin.getScore("  ").setScore(6);
+
+	Team reports = sb.registerNewTeam("reports");
+	reports.addEntry("Reports");
+	admin.getScore("Reports").setScore(4);
+
+	makeTeam(sb, "playerreports", "§c ", " ", String.valueOf(Report.list.size()));
+	admin.getScore("§c ").setScore(3);
+
+	makeTeam(sb, "build", "Build", "", "");
+	admin.getScore("Build").setScore(1);
+
+	makeTeam(sb, "playerbuild", "§c  ", "", String.valueOf(pd.canBuild()));
+	admin.getScore("§c  ").setScore(0);
+
+	makeTeam(sb, "aplace", "", "", "");
+	makeTeam(sb, "aplace2", "§9", "", "");
+	admin.getScore("§9").setScore(2);
+	admin.getScore("").setScore(5);
+
+    }
+
+    private Team makeTeam(Scoreboard sb, String name, String entry, String prefix, String suffix) {
+
+	Team team = sb.registerNewTeam(name);
+	team.addEntry(entry);
+	team.setPrefix(prefix);
+	team.setSuffix(suffix);
+
+	return team;
+
     }
 
     private void loadHolograms() {

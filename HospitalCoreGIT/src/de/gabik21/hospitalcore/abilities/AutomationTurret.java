@@ -11,9 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
-import org.bukkit.craftbukkit.v1_7_R4.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_7_R4.entity.CraftItem;
-import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -40,20 +37,22 @@ import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.DroppedItemWatcher;
-import net.minecraft.server.v1_7_R4.PacketPlayOutAttachEntity;
-import net.minecraft.server.v1_7_R4.PacketPlayOutEntityDestroy;
 
 public class AutomationTurret extends Ability implements Listener {
 
-    private static final long AUTOMATION_TURRET = 90_000;
+    private static final long AUTOMATION_TURRET_COOLDOWN = 90_000;
     private static final Set<Turret> TURRETS = new HashSet<>();
 
     @Override
     public void onDeath(PlayerDeathEvent e) {
 	Iterator<Turret> itr = TURRETS.iterator();
-	while (itr.hasNext())
-	    if (itr.next().getOwner().equals(e.getEntity().getName()))
+	while (itr.hasNext()) {
+	    Turret turret = itr.next();
+	    if (turret.getOwner().equals(e.getEntity().getName())) {
+		turret.remove(itr);
 		itr.remove();
+	    }
+	}
     }
 
     @Override
@@ -66,14 +65,15 @@ public class AutomationTurret extends Ability implements Listener {
 
 	for (Turret turret : TURRETS)
 	    if (turret.getOwner().equals(p.getName())) {
-		if (turret.getItem().getPassenger() == p)
+		if (turret.getItem().getPassenger() == p) {
 		    turret.setBullets(turret.getBullets() - 1);
-		Arrow arrow = p.launchProjectile(Arrow.class);
-		MiscDisguise dis = new MiscDisguise(DisguiseType.DROPPED_ITEM);
-		DroppedItemWatcher watcher = (DroppedItemWatcher) dis.getWatcher();
-		watcher.setItemStack(new ItemStack(Material.ENDER_PEARL));
-		DisguiseAPI.disguiseEntity(arrow, dis);
-		return;
+		    Arrow arrow = p.launchProjectile(Arrow.class);
+		    MiscDisguise dis = new MiscDisguise(DisguiseType.DROPPED_ITEM);
+		    DroppedItemWatcher watcher = (DroppedItemWatcher) dis.getWatcher();
+		    watcher.setItemStack(new ItemStack(Material.ENDER_PEARL));
+		    DisguiseAPI.disguiseEntity(arrow, dis);
+		    return;
+		}
 	    }
 
 	if (pd.isOnCooldown(Kit.AUTOMATIONTURRET))
@@ -85,7 +85,7 @@ public class AutomationTurret extends Ability implements Listener {
 		p.getName(), p.getWorld().spawn(new Location(p.getWorld(), loc.getBlockX() + 0.5,
 			loc.getBlockY() + 1.55, loc.getBlockZ() + 0.5), Minecart.class),
 		p.getLocation().getBlock().getState());
-	p.getLocation().getBlock().setType(Material.COBBLE_WALL);
+	p.getLocation().getBlock().setType(Material.FENCE);
 	TURRETS.add(turret);
 	turret.init();
 
@@ -152,40 +152,37 @@ public class AutomationTurret extends Ability implements Listener {
 	    return initialMinecartLoc;
 	}
 
-	public void remove() {
+	public void remove(Iterator<Turret> itr) {
 	    Bukkit.getScheduler().cancelTask(task);
 	    previousBlock.update(true, false);
 	    hologram.destroy();
 	    minecart.remove();
 	    item.remove();
-	    TURRETS.remove(this);
+	    if (itr == null)
+		TURRETS.remove(this);
+	    else
+		itr.remove();
 	}
 
-	@SuppressWarnings("deprecation")
 	public void init() {
 
 	    Hologram h = new Hologram(new ArrayList<>());
-	    h.show(minecart.getLocation().add(0, 1.1, 0));
+	    h.show(minecart.getLocation().add(0, 2.2, 0));
 	    h.addLine("§cHealth: " + health);
 	    h.addLine("§9Bullets: " + bullets);
 	    h.addLine("§3Missiles: " + missiles);
 	    hologram = h;
-	    item = minecart.getWorld().dropItem(initialMinecartLoc.clone().add(0, 0.3, 0),
+	    item = minecart.getWorld().dropItem(initialMinecartLoc.clone().add(0, 0.05, 0),
 		    new ItemStack(Material.STONE_BUTTON));
 	    item.setPickupDelay(Integer.MAX_VALUE);
 	    item.setMetadata("nodespawn", new FixedMetadataValue(HospitalCore.inst(), null));
-
-	    PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(item.getEntityId());
-	    for (Player player : Bukkit.getOnlinePlayers())
-		if (player != Bukkit.getPlayer(owner))
-		    ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
 
 	    BukkitTask t = new BukkitRunnable() {
 		@Override
 		public void run() {
 
 		    if (Bukkit.getPlayer(owner) == null) {
-			remove();
+			remove(null);
 			return;
 		    }
 
@@ -196,7 +193,7 @@ public class AutomationTurret extends Ability implements Listener {
 			update = false;
 		    }
 		    if (health <= 0 || bullets <= 0)
-			remove();
+			remove(null);
 
 		    item.setVelocity(new Vector());
 
@@ -209,10 +206,10 @@ public class AutomationTurret extends Ability implements Listener {
 		    if (!item.isEmpty()) {
 			Entity passenger = item.getPassenger();
 			item.getPassenger().eject();
-			item.teleport(loc.clone().add(0, 0.3, 0));
+			item.teleport(loc.clone().add(0, 0.2, 0));
 			item.setPassenger(passenger);
 		    } else {
-			item.teleport(loc.clone().add(0, 0.3, 0));
+			item.teleport(loc.clone().add(0, 0.2, 0));
 		    }
 
 		}
@@ -267,7 +264,7 @@ public class AutomationTurret extends Ability implements Listener {
 
     @Override
     public long getCooldown() {
-	return AUTOMATION_TURRET;
+	return AUTOMATION_TURRET_COOLDOWN;
     }
 
 }

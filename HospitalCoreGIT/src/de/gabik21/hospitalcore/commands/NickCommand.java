@@ -61,7 +61,7 @@ public class NickCommand implements CommandExecutor {
 		new BukkitRunnable() {
 		    public void run() {
 			String name = "";
-			while (true) {
+			OUTERLOOP: while (true) {
 			    try {
 				Pair<ResultSet, PreparedStatement> p = MySQL
 					.executeQuery("SELECT * FROM nicknames ORDER BY RAND() LIMIT 1");
@@ -74,7 +74,7 @@ public class NickCommand implements CommandExecutor {
 			    }
 			    for (PlayerData data : PlayerData.map.values())
 				if (data.getNick().equalsIgnoreCase(name))
-				    continue;
+				    continue OUTERLOOP;
 			    break;
 			}
 			PlayerDisguise nick = new PlayerDisguise(name);
@@ -91,9 +91,11 @@ public class NickCommand implements CommandExecutor {
 			    playersToViewDisguise.add(pl.getName());
 
 			}
+			Listeners.setNick(p, PermissionsEx.getUser(name).getPrefix());
 			final String finalname = name;
 			new BukkitRunnable() {
 			    public void run() {
+				pd.setNick(finalname);
 				DisguiseAPI.disguiseToPlayers(p, nick, playersToViewDisguise);
 				p.setDisplayName(finalname);
 				p.setPlayerListName(p.getDisplayName());
