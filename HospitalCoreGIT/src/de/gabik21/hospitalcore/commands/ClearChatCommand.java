@@ -12,9 +12,10 @@ public class ClearChatCommand implements CommandExecutor {
 	if (!sender.hasPermission("Supporter") && !sender.hasPermission("Moderator"))
 	    return true;
 
-	Bukkit.broadcastMessage(
-		"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n§aChat has been cleared by "
-			+ sender.getName());
+	for (int i = 0; i < 100; i++)
+	    Bukkit.broadcastMessage("");
+
+	Bukkit.broadcastMessage("§aChat has been cleared by " + sender.getName());
 	return true;
     }
 

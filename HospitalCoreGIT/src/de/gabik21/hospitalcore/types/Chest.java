@@ -138,7 +138,8 @@ public class Chest implements Listener {
 				Bukkit.getScheduler().cancelTask(taskid.get());
 				ItemStack stack = inv.get(p.getName()).getItem(13);
 				for (Kit kit : Kit.values()) {
-				    if (stack.getItemMeta().getDisplayName().contains(kit.getName())) {
+				    if (stack.getItemMeta().getDisplayName()
+					    .equals(kit.getLevel().getPrefix() + kit.getName())) {
 					chosen = kit;
 					break;
 				    }

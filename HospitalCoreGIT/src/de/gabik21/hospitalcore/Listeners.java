@@ -3,6 +3,7 @@ package de.gabik21.hospitalcore;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -141,15 +142,17 @@ public class Listeners implements Listener {
 	}
 
 	if (Bukkit.getPluginManager().getPlugin("PermissionsEx") == null) {
-
 	    System.out.println("Could not find PermissionsEx");
 	    return;
 	}
 
 	e.getRecipients().clear();
-	for (PlayerData pdall : PlayerData.map.values()) {
+	for (PlayerData pdall : new HashSet<>(PlayerData.map.values())) {
 	    if (!pdall.getPlayer().getWorld().getName().equals("replay"))
 		e.getRecipients().add(pdall.getPlayer());
+	    if (pdall.getNick().equals(pdall.getPlayer().getName()))
+		e.setMessage(e.getMessage().replaceAll(pdall.getNick(), pdall.getPrefix() + pdall.getNick() + "§r"));
+
 	}
 
 	if (p.hasPermission("Owner") || p.hasPermission("Moderator"))
@@ -168,7 +171,7 @@ public class Listeners implements Listener {
 	    }
 	}
 
-	String s = PermissionsEx.getUser(pd.getNick()).getPrefix();
+	String s = pd.getNick().equals(p.getName()) ? pd.getPrefix() : PermissionsEx.getUser(pd.getNick()).getPrefix();
 	setNick(p, s);
 
 	if (pd.getLastMessage() != null && pd.getLastMessage().equalsIgnoreCase(e.getMessage())) {
@@ -178,7 +181,6 @@ public class Listeners implements Listener {
 	}
 
 	pd.setLastMessage(e.getMessage());
-	e.setMessage(e.getMessage().replaceAll(pd.getNick(), s + pd.getNick()));
 
 	if (!pd.getNick().equals(p.getName())) {
 	    e.setFormat(s + pd.getNick() + "§7§l> §r" + e.getMessage());

@@ -265,8 +265,10 @@ public class HospitalCore extends JavaPlugin {
 			Scoreboard sb = p.getScoreboard();
 			Objective obj = sb.getObjective("sidebar");
 
-			if (obj == null)
+			if (obj == null) {
 			    makeScoreboard(p);
+			    obj = sb.getObjective("sidebar");
+			}
 
 			Objective admin = sb.getObjective("admin");
 			Team name = sb.getTeam("playername");

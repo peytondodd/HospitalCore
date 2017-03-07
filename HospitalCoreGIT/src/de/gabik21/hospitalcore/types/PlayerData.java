@@ -29,6 +29,7 @@ import net.md_5.bungee.api.chat.ClickEvent.Action;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class PlayerData {
 
@@ -43,7 +44,7 @@ public class PlayerData {
     private AbstractGUI currentGui;
     private PerKitCooldown perKitCooldown = new PerKitCooldown();
     private long lastReport, money, lasthit;
-    private String nick, lastmessage;
+    private String nick, lastmessage, prefix;
     private List<String> duels = new ArrayList<String>();
     private Team team, teaminvitation;
     private Set<ProtectedRegion> currentregions = new HashSet<ProtectedRegion>();
@@ -69,6 +70,7 @@ public class PlayerData {
 	map.put(p, this);
 	lastLocationOnGround = player.getLocation();
 	lastBrokenBlock = player.getWorld().getBlockAt(0, 0, 0);
+	prefix = PermissionsEx.getUser(player).getPrefix();
 
     }
 
@@ -90,6 +92,14 @@ public class PlayerData {
 
     public void hit() {
 	this.lasthit = System.currentTimeMillis();
+    }
+
+    public String getPrefix() {
+	return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+	this.prefix = prefix;
     }
 
     public boolean hasMoney(long amount) {
@@ -356,6 +366,10 @@ public class PlayerData {
 	this.setHg(false);
 	this.setLastDamaged(null);
 	player.setGameMode(GameMode.SURVIVAL);
+
+	for (PlayerData data : map.values())
+	    if (data.getLastDamaged() != null && data.getLastDamaged().equals(player))
+		data.setLastDamaged(null);
 
 	setWalkSpeed(0.2F);
 

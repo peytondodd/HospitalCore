@@ -6,18 +6,19 @@ import java.util.UUID;
 public class Offer implements Serializable, Comparable<Offer> {
 
     private static final long serialVersionUID = 550159301481306803L;
-    private String nameOfferedBy;
+    private String nameOfferedBy, adress;
     private UUID offeredBy, id;
     private Kit kit;
     private long price;
 
-    public Offer(UUID offeredBy, Kit kit, long price, String nameOfferedBy) {
+    public Offer(UUID offeredBy, Kit kit, long price, String nameOfferedBy, String adress) {
 
 	this.kit = kit;
 	this.offeredBy = offeredBy;
 	this.nameOfferedBy = nameOfferedBy;
 	this.price = price;
 	this.id = UUID.randomUUID();
+	this.adress = adress;
 
     }
 
@@ -33,6 +34,14 @@ public class Offer implements Serializable, Comparable<Offer> {
 	return nameOfferedBy;
     }
 
+    public String getAdress() {
+	return adress;
+    }
+
+    public void setAdress(String adress) {
+	this.adress = adress;
+    }
+
     public Kit getKit() {
 	return kit;
     }
@@ -42,7 +51,7 @@ public class Offer implements Serializable, Comparable<Offer> {
     }
 
     public int compareTo(Offer offer) {
-	return this.price <= offer.getPrice() ? 0 : 1;
+	return (int) (getPrice() - offer.getPrice());
     }
 
     @Override

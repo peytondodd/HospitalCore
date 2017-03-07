@@ -59,7 +59,7 @@ public enum Kit {
 	    new ItemStack[] {},
 	    new ItemStack(Material.ANVIL),
 	    new Anchor(),
-	    14D,
+	    25D,
 	    KitLevel.GOLD,
 	    Arrays.asList("Take no knockback", "deal no knockback")),
     @SuppressWarnings("deprecation")
