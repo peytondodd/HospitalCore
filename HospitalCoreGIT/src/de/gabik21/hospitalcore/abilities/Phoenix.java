@@ -50,7 +50,7 @@ public class Phoenix extends Ability {
 		if (ent instanceof Player) {
 		    Player nearby = (Player) ent;
 		    nearby.sendMessage("§4§lBe a witness in reincarnation of " + p.getName()
-			    + " and the mighty phoenix he is united with");
+			    + "and the mighty phoenix he is united with");
 
 		}
 	    }
