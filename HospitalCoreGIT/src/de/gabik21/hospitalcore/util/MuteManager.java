@@ -35,6 +35,7 @@ public class MuteManager {
 	    ps.setString(5, muter);
 
 	    ps.executeUpdate();
+	    ps.close();
 
 	} catch (SQLException e) {
 	    e.printStackTrace();
@@ -50,6 +51,7 @@ public class MuteManager {
 	    ps.setString(1, uuid);
 
 	    ps.executeUpdate();
+	    ps.close();
 
 	} catch (SQLException e) {
 	    e.printStackTrace();
@@ -76,12 +78,13 @@ public class MuteManager {
 
 	try {
 
-	    PreparedStatement ps = MySQL.getConnection().prepareStatement("SELECT * FROM mutes WHERE UUID = ?");
+	    PreparedStatement ps = MySQL.getConnection().prepareStatement("SELECT Reason FROM mutes WHERE UUID = ?");
 	    ps.setString(1, uuid);
 	    ResultSet rs = ps.executeQuery();
 
 	    while (rs.next())
 		return rs.getString("Reason");
+	    ps.close();
 
 	} catch (SQLException e) {
 	    e.printStackTrace();
@@ -94,12 +97,13 @@ public class MuteManager {
 
 	try {
 
-	    PreparedStatement ps = MySQL.getConnection().prepareStatement("SELECT * FROM mutes WHERE UUID = ?");
+	    PreparedStatement ps = MySQL.getConnection().prepareStatement("SELECT Muter FROM mutes WHERE UUID = ?");
 	    ps.setString(1, uuid);
 	    ResultSet rs = ps.executeQuery();
 
 	    while (rs.next())
 		return rs.getString("Muter");
+	    ps.close();
 
 	} catch (SQLException e) {
 
@@ -114,12 +118,13 @@ public class MuteManager {
 
 	try {
 
-	    PreparedStatement ps = MySQL.getConnection().prepareStatement("SELECT * FROM mutes WHERE UUID = ?");
+	    PreparedStatement ps = MySQL.getConnection().prepareStatement("SELECT End FROM mutes WHERE UUID = ?");
 	    ps.setString(1, uuid);
 	    ResultSet rs = ps.executeQuery();
 
 	    while (rs.next())
 		return Long.valueOf(rs.getLong("End"));
+	    ps.close();
 
 	} catch (SQLException e) {
 	    e.printStackTrace();
@@ -135,11 +140,12 @@ public class MuteManager {
 
 	try {
 
-	    PreparedStatement ps = MySQL.getConnection().prepareStatement("SELECT * FROM mutes");
+	    PreparedStatement ps = MySQL.getConnection().prepareStatement("SELECT Name FROM mutes");
 	    ResultSet rs = ps.executeQuery();
 
 	    while (rs.next())
 		temp.add(rs.getString("Name"));
+	    ps.close();
 
 	} catch (SQLException e) {
 

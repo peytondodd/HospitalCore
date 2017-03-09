@@ -462,7 +462,7 @@ public class HospitalCore extends JavaPlugin {
     }
 
     public static PlayerData getData(Player p) {
-	return PlayerData.map.get(p);
+	return PlayerData.map.get(p.getUniqueId());
     }
 
     public static Report getReport(UUID uuid) {

@@ -11,7 +11,9 @@ public enum SpawnPoints {
     SPAWN(
 	    new Location(Bukkit.getWorlds().get(0), HospitalCore.inst().getConfig().getDouble("spawn.x"),
 		    HospitalCore.inst().getConfig().getDouble("spawn.y") + 1,
-		    HospitalCore.inst().getConfig().getDouble("spawn.z"))),
+		    HospitalCore.inst().getConfig().getDouble("spawn.z"),
+		    (float) HospitalCore.inst().getConfig().getDouble("spawn.yaw"),
+		    (float) HospitalCore.inst().getConfig().getDouble("spawn.pitch"))),
     ONEVSONE(
 	    new Location(Bukkit.getWorlds().get(0), HospitalCore.inst().getConfig().getDouble("1v1.x"),
 		    HospitalCore.inst().getConfig().getDouble("1v1.y") + 1,

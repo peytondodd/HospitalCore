@@ -27,7 +27,7 @@ import de.gabik21.hospitalcore.types.Stats;
 
 public class SavingUnit {
 
-    public static void saveData(final PlayerData pd) {
+    public static void saveData(PlayerData pd) {
 
 	final String uuid = pd.getPlayer().getUniqueId().toString();
 	final Stats stats = pd.getStats();
