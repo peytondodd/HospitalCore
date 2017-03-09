@@ -193,10 +193,10 @@ public class Listeners implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onQuit(PlayerQuitEvent e) {
 
-	final Player p = e.getPlayer();
-	final PlayerData data = HospitalCore.getData(p);
+	Player p = e.getPlayer();
+	PlayerData data = HospitalCore.getData(p);
 
-	final UUID uuid = p.getUniqueId();
+	UUID uuid = p.getUniqueId();
 
 	e.setQuitMessage(null);
 	data.setFakekits(false);
@@ -213,7 +213,7 @@ public class Listeners implements Listener {
 
 		}
 	    }.runTaskAsynchronously(main);
-
+	PlayerData.map.remove(uuid);
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -448,7 +448,7 @@ public class Listeners implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onJoin(PlayerJoinEvent e) {
 
-	final Player p = e.getPlayer();
+	Player p = e.getPlayer();
 	p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 
 	PlayerData pd = new PlayerData(p);

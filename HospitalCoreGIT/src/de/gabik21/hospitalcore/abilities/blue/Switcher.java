@@ -22,6 +22,7 @@ public class Switcher extends Ability {
 
 	@SuppressWarnings("deprecation")
 	Player p = (Player) ((Snowball) e.getDamager()).getShooter();
+	
 	Player t = (Player) e.getEntity();
 	PlayerData td = HospitalCore.getData(t);
 

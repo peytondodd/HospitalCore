@@ -34,14 +34,14 @@ import ru.tehkode.permissions.bukkit.PermissionsEx;
 public class PlayerData {
 
     public static final Map<UUID, LoadedData> preloaded = new ConcurrentHashMap<UUID, LoadedData>();
-    public static final Map<Player, PlayerData> map = new HashMap<Player, PlayerData>();
+    public static final Map<UUID, PlayerData> map = new HashMap<UUID, PlayerData>();
     static final Random rand = new Random();
 
     private Player player, lastDamaged, reply;
     private boolean adminmode = false, frozen = false, ingame = false, in1v1 = false, disguised = false,
 	    challenge = false, fakekits = false, hg = false, build = false, spawnAtChallenge = false;
     private int currentArena = -1, chests;
-    private AbstractGUI currentGui;
+    private AbstractGUI currentGui, previousGui;
     private PerKitCooldown perKitCooldown = new PerKitCooldown();
     private long lastReport, money, lasthit;
     private String nick, lastmessage, prefix;
@@ -67,7 +67,7 @@ public class PlayerData {
 	stats = data.getStats();
 	kitConfigs = data.getKitconfigs();
 	preloaded.remove(p.getUniqueId());
-	map.put(p, this);
+	map.put(p.getUniqueId(), this);
 	lastLocationOnGround = player.getLocation();
 	lastBrokenBlock = player.getWorld().getBlockAt(0, 0, 0);
 	prefix = PermissionsEx.getUser(player).getPrefix();
@@ -235,6 +235,14 @@ public class PlayerData {
 
     public int getCurrentArena() {
 	return this.currentArena;
+    }
+
+    public AbstractGUI getPreviousGui() {
+	return previousGui;
+    }
+
+    public void setPreviousGui(AbstractGUI previousGui) {
+	this.previousGui = previousGui;
     }
 
     public void setCurrentArena(int i) {
