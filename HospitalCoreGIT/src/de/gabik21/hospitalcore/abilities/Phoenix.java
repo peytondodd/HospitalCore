@@ -43,10 +43,14 @@ public class Phoenix extends Ability {
 	    Inventories.RC32.apply(((Player) e.getEntity()));
 
 	    e.setCancelled(true);
+
+	    p.sendMessage("§4§lBe a witness in reincarnation of the mighty phoenix you're united with");
+
 	    for (Entity ent : d.getNearbyEntities(50, 50, 50)) {
 		if (ent instanceof Player) {
 		    Player nearby = (Player) ent;
-		    nearby.sendMessage("§4§lBe a witness in reincarnation of the mighty phoenix you're united with");
+		    nearby.sendMessage("§4§lBe a witness in reincarnation of " + p.getName()
+			    + " and the mighty phoenix he is united with");
 
 		}
 	    }
@@ -91,7 +95,7 @@ public class Phoenix extends Ability {
 				(float) (loc3.getX()), (float) (loc3.getY()), (float) (loc3.getZ()), 0, 0, 0, 0, 1);
 			PacketPlayOutWorldParticles packet4 = new PacketPlayOutWorldParticles("fireworksSpark",
 				(float) (loc4.getX()), (float) (loc4.getY()), (float) (loc4.getZ()), 0, 0, 0, 0, 1);
-			
+
 			for (Player online : Bukkit.getOnlinePlayers()) {
 			    ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet);
 			    ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet2);
@@ -112,7 +116,7 @@ public class Phoenix extends Ability {
 				.withFade(Color.BLUE).build());
 			meta.setPower(1);
 			fw.setFireworkMeta(meta);
-			
+
 			new BukkitRunnable() {
 			    @Override
 			    public void run() {
