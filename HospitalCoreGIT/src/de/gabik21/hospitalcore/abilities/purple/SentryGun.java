@@ -27,7 +27,7 @@ public class SentryGun extends Ability {
 	    int i = 0;
 
 	    public void run() {
-		if (i >= 65 || !p.isOnline() || p.isDead()) {
+		if (i >= 65 || !p.isOnline() || p.isDead() || !pd.isIngame()) {
 		    cancel();
 		    return;
 		}
