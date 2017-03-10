@@ -1,9 +1,7 @@
 package de.gabik21.hospitalcore.types;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -45,7 +43,7 @@ public class PlayerData {
     private PerKitCooldown perKitCooldown = new PerKitCooldown();
     private long lastReport, money, lasthit;
     private String nick, lastmessage, prefix;
-    private List<String> duels = new ArrayList<String>();
+    private Set<String> duels = new HashSet<String>();
     private Team team, teaminvitation;
     private Set<ProtectedRegion> currentregions = new HashSet<ProtectedRegion>();
     private KitConfiguration kitConfig;
@@ -185,7 +183,7 @@ public class PlayerData {
 	return this.team;
     }
 
-    public List<String> getDuels() {
+    public Set<String> getDuels() {
 	return this.duels;
     }
 

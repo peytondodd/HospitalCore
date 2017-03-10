@@ -1,7 +1,7 @@
 package de.gabik21.hospitalcore.abilities;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -17,7 +17,7 @@ import de.gabik21.hospitalcore.types.Kit;
 
 public class Kangaroo extends Ability {
 
-    private List<String> inair = new ArrayList<String>();
+    private Set<String> inair = new HashSet<String>();
 
     @Override
     public void onDamage(EntityDamageEvent e) {

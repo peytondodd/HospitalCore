@@ -1,6 +1,7 @@
 package de.gabik21.hospitalcore.commands;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -15,7 +16,7 @@ import de.gabik21.hospitalcore.types.PlayerData;
 public class SpawnCommand implements CommandExecutor {
 
     private HospitalCore main;
-    private ArrayList<String> teleportqueue = new ArrayList<String>();
+    private Set<String> teleportqueue = new HashSet<String>();
     private static final String SPAWN_MESSAGE = "§aTeleported to the spawn";
 
     public SpawnCommand(HospitalCore main) {
