@@ -61,9 +61,9 @@ public class Gladiator extends Ability implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onDeath(PlayerDeathEvent e) {
 
-	final Player p = e.getEntity().getKiller();
+	Player p = e.getEntity().getKiller();
 	PlayerData pd = HospitalCore.getData(p);
-	final Player t = (Player) e.getEntity();
+	Player t = (Player) e.getEntity();
 
 	if (GLADIATORLOCS.containsKey(t.getName())) {
 

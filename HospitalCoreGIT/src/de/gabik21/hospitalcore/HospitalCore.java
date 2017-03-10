@@ -462,6 +462,8 @@ public class HospitalCore extends JavaPlugin {
     }
 
     public static PlayerData getData(Player p) {
+	if (p == null)
+	    return null;
 	return PlayerData.map.get(p.getUniqueId());
     }
 
